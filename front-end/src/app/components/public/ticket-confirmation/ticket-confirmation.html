@@ -1,0 +1,37 @@
+<main class="ticket-page">
+    <div class="success-heading"><span aria-hidden="true">✓</span>
+        <div><strong>{{ receipt().testMode ? 'Réservation de test enregistrée' : 'Réservation enregistrée' }}</strong>
+            <small>{{ receipt().testMode ? 'Simulation uniquement — billet non valable pour voyager.' : 'Garde ce
+                billet et présente-le au départ.' }}</small>
+        </div>
+    </div>
+    <article class="ticket-card">
+        <header class="ticket-header">
+            <div>
+                <p>CARAVANE UGB · AERK</p>
+                <h1>Billet étudiant</h1>
+            </div><span class="verified" aria-label="Billet confirmé">✓</span>
+        </header>
+        <section class="ticket-route">
+            <div><small>DÉPART</small><strong>Kaolack</strong></div><span aria-hidden="true">→</span>
+            <div><small>ARRIVÉE</small><strong>Saint-Louis</strong></div>
+        </section>
+        <div class="ticket-perforation"><span></span><i></i><span></span></div>
+        <section class="passenger"><small>PASSAGER</small><strong>{{ receipt().reservation.nom | uppercase }} {{
+                receipt().reservation.prenom }}</strong><span>{{ receipt().reservation.telephone }}</span></section>
+        <section class="seat-grid">
+            <div><small>BUS</small><strong>{{ receipt().reservation.bus.numeroBus | number:'2.0-0' }}</strong></div>
+            <div><small>SIÈGE</small><strong>{{ receipt().reservation.numSiege | number:'2.0-0' }}</strong></div>
+        </section>
+        <section class="payment-info"><span><small>PAIEMENT · {{ receipt().paymentMethod === 'WAVE' ? 'WAVE' : 'ORANGE
+                    MONEY' }}</small><strong>{{ receipt().testMode ? 'Simulation de test — aucun débit réel' :
+                    receipt().reservation.statutPaiement }}</strong></span><span class="payment-status">{{
+                receipt().testMode ? 'TEST' : receipt().reservation.statutPaiement }}</span>
+        </section>
+        <footer class="ticket-footer"><span>Rassemblement au Cœur de Ville de Kaolack le jour du
+                départ.</span><strong>AERK-{{ receipt().reservation.id | number:'4.0-0' }}</strong></footer>
+    </article>
+    <div class="ticket-actions"><button class="print-button" type="button" (click)="print()">Imprimer mon billet <span
+                aria-hidden="true">↗</span></button><button class="home-button" type="button"
+            (click)="done.emit()">Retour à l’accueil</button></div>
+</main>

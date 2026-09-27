@@ -1,0 +1,101 @@
+<main class="admin-page">
+    <section class="admin-hero">
+        <div>
+            <p class="eyebrow">ESPACE ÉQUIPE · AERK</p>
+            <h1>La caravane, en route.</h1>
+            <p>Pilote les inscriptions et prépare les départs de l’Amicale.</p>
+        </div><button class="logout-button" type="button" (click)="logout.emit()">Déconnexion</button>
+        <div class="session-status"><span class="status-dot"
+                [class.status-off]="!session()?.active"></span><span><small>SESSION ACTUELLE</small><strong>{{
+                    session()?.active ? 'Inscriptions ouvertes' : 'Aucune session active' }}</strong></span></div>
+    </section>
+
+    @if (error()) { <p class="admin-error" role="alert">{{ error() }}</p> }
+
+    <section class="admin-panel">
+        <header class="panel-heading">
+            <div>
+                <p class="eyebrow">01 · SESSION</p>
+                <h2>Gérer les inscriptions</h2>
+            </div><span class="session-id">{{ session()?.active ? 'SESSION #' + session()?.id : 'EN ATTENTE' }}</span>
+        </header>
+        @if (session()?.active) {
+        <div class="active-session"><span class="session-symbol" aria-hidden="true">✳</span><span><small>DATES DU
+                    DÉPART</small><strong>{{ session()?.datesDepart }}</strong></span><button class="stop-button"
+                type="button" (click)="closeSession()" [disabled]="loading()">Arrêter les inscriptions <span
+                    aria-hidden="true">×</span></button></div>
+        } @else {
+        <form class="start-form" (ngSubmit)="startSession()"><label>Dates du départ<input name="datesDepart"
+                    [(ngModel)]="departureDates" placeholder="Ex. 21, 22 et 23 octobre" required /></label><button
+                class="start-button" type="submit" [disabled]="loading() || !departureDates.trim()">{{ loading() ?
+                'Démarrage…' : 'Démarrer une session' }} <span aria-hidden="true">→</span></button></form>
+        }
+    </section>
+
+    <section class="admin-panel passengers-panel">
+        <header class="panel-heading">
+            <div>
+                <p class="eyebrow">02 · PASSAGERS</p>
+                <h2>Les bus de la caravane</h2>
+            </div><button class="refresh-button" type="button" (click)="loadBuses()"
+                [disabled]="!session()?.active || loading()">Actualiser <span aria-hidden="true">↻</span></button>
+        </header>
+        @if (!session()?.active) {
+        <div class="empty-state"><span aria-hidden="true">↗</span>
+            <p>Démarre une session pour afficher les bus et les listes de passagers.</p>
+        </div>
+        } @else if (buses().length === 0) {
+        <div class="empty-state"><span aria-hidden="true">▱</span>
+            <p>Aucune réservation pour le moment. Les bus apparaîtront dès qu’une place sera prise.</p>
+        </div>
+        } @else {
+        <div class="bus-grid">
+            @for (bus of buses(); track bus.id) {
+            <button class="bus-card" type="button" [class.bus-card-active]="selectedBus()?.id === bus.id"
+                (click)="selectBus(bus)">
+                <span class="bus-icon" aria-hidden="true">▰</span><strong>Bus {{ bus.numeroBus | number:'2.0-0'
+                    }}</strong><small>{{ bus.placesOccupees }} / {{ bus.capacite }} places</small><span
+                    class="progress"><i
+                        [style.width.%]="bus.capacite ? (bus.placesOccupees / bus.capacite) * 100 : 0"></i></span>
+            </button>
+            }
+        </div>
+        @if (selectedBus(); as bus) {
+        <div class="passenger-heading">
+            <div>
+                <p class="eyebrow">LISTE DES PASSAGERS</p>
+                <h3>Bus {{ bus.numeroBus | number:'2.0-0' }} <small>· {{ passengers().length }} {{ passengers().length
+                        === 1 ? 'inscrit' : 'inscrits' }}</small></h3>
+            </div><app-print-bus-list [bus]="bus" [session]="session()" [passengers]="passengers()" />
+        </div>
+        @if (passengers().length === 0) {
+        <p class="empty-passengers">Aucun passager enregistré dans ce bus.</p>
+        } @else {
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SIÈGE</th>
+                        <th>PASSAGER</th>
+                        <th>TÉLÉPHONE</th>
+                        <th>PAIEMENT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (passenger of passengers(); track passenger.id) {
+                    <tr>
+                        <td><span class="seat-number">{{ passenger.numSiege | number:'2.0-0' }}</span></td>
+                        <td><strong>{{ passenger.nom }} {{ passenger.prenom }}</strong></td>
+                        <td>{{ passenger.telephone }}</td>
+                        <td>{{ passenger.paiementTest ? 'TEST · ' : '' }}{{ passenger.moyenPaiement || '—' }} · {{
+                            passenger.statutPaiement }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+        }
+        }
+    </section>
+</main>

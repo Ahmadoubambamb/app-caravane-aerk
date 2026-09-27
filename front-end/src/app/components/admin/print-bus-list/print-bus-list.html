@@ -1,0 +1,38 @@
+@if (bus(); as currentBus) {
+<button class="print-action" type="button" (click)="print()" [disabled]="passengers().length === 0">
+    <span aria-hidden="true">⤓</span> Imprimer / PDF
+</button>
+<section class="print-sheet" aria-label="Liste imprimable des passagers">
+    <header class="print-header">
+        <div>
+            <p>AMICALE DES ÉTUDIANTS RESSORTISSANTS DE KAOLACK</p>
+            <h1>Liste des passagers · Bus {{ currentBus.numeroBus | number:'2.0-0' }}</h1>
+        </div>
+        <span>KAOLACK → SAINT-LOUIS</span>
+    </header>
+    <p class="session-line">Départ : {{ session()?.datesDepart || 'Dates à confirmer' }} <span>·</span> {{
+        passengers().length }} {{ passengers().length === 1 ? 'passager' : 'passagers' }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>SIÈGE</th>
+                <th>NOM COMPLET</th>
+                <th>TÉLÉPHONE</th>
+                <th>PAIEMENT</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (passenger of passengers(); track passenger.id) {
+            <tr>
+                <td>{{ passenger.numSiege | number:'2.0-0' }}</td>
+                <td>{{ passenger.nom }} {{ passenger.prenom }}</td>
+                <td>{{ passenger.telephone }}</td>
+                <td>{{ passenger.paiementTest ? 'TEST · ' : '' }}{{ passenger.moyenPaiement || '—' }} · {{
+                    passenger.statutPaiement }}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <footer class="signatures"><span>Responsable de bus</span><span>Contrôle au départ</span></footer>
+</section>
+}

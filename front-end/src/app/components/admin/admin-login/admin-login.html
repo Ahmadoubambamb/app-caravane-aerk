@@ -1,0 +1,19 @@
+<main class="admin-login-page">
+    <form class="admin-login-panel" (ngSubmit)="login()">
+        <p class="eyebrow">ESPACE RÉSERVÉ · AERK</p>
+        <h1>Administration</h1>
+        <p class="login-description">Connecte-toi pour gérer les inscriptions et les départs.</p>
+        <label>Identifiant
+            <input name="username" [(ngModel)]="credentials.username" autocomplete="username" required />
+        </label>
+        <label>Mot de passe
+            <input name="password" type="password" [(ngModel)]="credentials.password"
+                autocomplete="current-password" required />
+        </label>
+        @if (error()) { <p class="login-error" role="alert">{{ error() }}</p> }
+        <button type="submit" [disabled]="loading() || !credentials.username || !credentials.password">
+            {{ loading() ? 'Connexion…' : 'Se connecter' }} <span aria-hidden="true">→</span>
+        </button>
+        <button class="cancel-button" type="button" (click)="cancel.emit()">Retour au site</button>
+    </form>
+</main>

@@ -1,0 +1,97 @@
+:host {
+    display: block;
+}
+
+.admin-login-page {
+    min-height: calc(100vh - 76px);
+    display: grid;
+    place-items: center;
+    padding: 32px 20px;
+    background: radial-gradient(ellipse at 50% 0, #cee4d08c, transparent 45%), #fafbf7;
+}
+
+.admin-login-panel {
+    width: min(100%, 440px);
+    display: grid;
+    gap: 18px;
+    padding: 36px;
+    border: 1px solid #e0e8e2;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 55px #102a3a12;
+}
+
+.eyebrow {
+    margin: 0;
+    color: #087e62;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .19em;
+}
+
+h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.login-description {
+    margin: -8px 0 4px;
+    color: #697b82;
+    line-height: 1.6;
+}
+
+label {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+input {
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid #d9e3dd;
+    border-radius: 12px;
+    color: #102a3a;
+    font: inherit;
+}
+
+input:focus {
+    outline: 2px solid #087e6244;
+    border-color: #087e62;
+}
+
+button {
+    min-height: 48px;
+    border: 0;
+    border-radius: 12px;
+    background: #087e62;
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.cancel-button {
+    min-height: 40px;
+    background: transparent;
+    color: #697b82;
+}
+
+.login-error {
+    margin: 0;
+    color: #a12d35;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .admin-login-panel {
+        padding: 26px 20px;
+    }
+}

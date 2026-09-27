@@ -1,0 +1,111 @@
+:host {
+    display: block;
+}
+
+.print-action {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 11px;
+    border: 1px solid #d9e4db;
+    border-radius: 7px;
+    background: #f5f9f5;
+    color: #176b4c;
+    font: inherit;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.print-action span {
+    font-size: 14px;
+}
+
+.print-action:hover:not(:disabled) {
+    border-color: #83b99b;
+    background: #ebf5ec;
+}
+
+.print-action:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.print-sheet {
+    display: none;
+    color: #102a3a;
+}
+
+@media print {
+    .print-action {
+        display: none !important;
+    }
+
+    .print-sheet {
+        display: block;
+        font: 10pt Arial, sans-serif;
+    }
+
+    .print-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 15px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #102a3a;
+    }
+
+    .print-header p {
+        margin: 0 0 7px;
+        color: #287354;
+        font-size: 8pt;
+        font-weight: 700;
+        letter-spacing: .12em;
+    }
+
+    .print-header h1 {
+        margin: 0;
+        font-size: 20pt;
+    }
+
+    .print-header>span {
+        font-size: 8pt;
+        font-weight: 700;
+    }
+
+    .session-line {
+        margin: 15px 0;
+        font-size: 10pt;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    th {
+        padding: 9px 8px;
+        border-bottom: 1px solid #9caaa1;
+        font-size: 8pt;
+    }
+
+    td {
+        padding: 9px 8px;
+        border-top: 1px solid #d8e0da;
+        font-size: 9pt;
+    }
+
+    .signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 48px;
+    }
+
+    .signatures span {
+        width: 38%;
+        padding-top: 8px;
+        border-top: 1px solid #89968e;
+        font-size: 8pt;
+    }
+}

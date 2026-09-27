@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    color: #102a3a;
+    background: #fafbf7;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 320px;
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background: #fafbf7;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid #45ad81;
+    outline-offset: 3px;
+}
+
+::selection {
+    background: #b9e3cb;
+    color: #102a3a;
+}
+
+.connection-error {
+    position: fixed;
+    z-index: 20;
+    top: 88px;
+    left: 50%;
+    width: min(560px, calc(100% - 32px));
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 15px;
+    border: 1px solid #f0c7bb;
+    border-radius: 8px;
+    background: #fff4f0;
+    color: #973e2b;
+    box-shadow: 0 12px 30px #163d2a1c;
+    font-size: 11px;
+    transform: translateX(-50%);
+}
+
+.connection-error button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 18px;
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 15mm;
+    }
+
+    body:not(.printing-bus-list) .site-header {
+        display: none !important;
+    }
+
+    body.printing-bus-list app-root> :not(app-admin-dashboard) {
+        display: none !important;
+    }
+
+    body.printing-bus-list app-admin-dashboard .admin-page> :not(.passengers-panel) {
+        display: none !important;
+    }
+
+    body.printing-bus-list app-admin-dashboard .passengers-panel> :not(.passenger-heading) {
+        display: none !important;
+    }
+
+    body.printing-bus-list app-admin-dashboard .passenger-heading> :not(app-print-bus-list) {
+        display: none !important;
+    }
+
+    body.printing-bus-list app-admin-dashboard .admin-page,
+    body.printing-bus-list app-admin-dashboard .passengers-panel {
+        display: contents !important;
+    }
+}

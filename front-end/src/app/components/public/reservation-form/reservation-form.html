@@ -1,0 +1,89 @@
+<main class="reservation-page">
+    <button class="back-link" type="button" (click)="cancel.emit()"><span aria-hidden="true">←</span> Retour à
+        l’accueil</button>
+    <div class="reservation-layout">
+        <section class="reservation-intro">
+            @if (step() === 'details') {
+            <p class="eyebrow">ÉTAPE 01 · VOTRE PLACE</p>
+            <h1>On garde une place pour toi.</h1>
+            <p>Renseigne tes coordonnées telles qu’elles figurent sur ta pièce d’identité pour préparer ton billet.</p>
+            } @else {
+            <p class="eyebrow">ÉTAPE 02 · PAIEMENT</p>
+            <h1>Ta place est presque réservée.</h1>
+            <p>Paie avec Wave les <strong>6 500 F CFA</strong>.</p>
+            @if (paymentMode() === 'wave') {
+            <div class="payment-note"><span aria-hidden="true">✓</span>
+                <p>Le paiement sera confirmé par Wave avant l’émission de ton billet.</p>
+            </div>
+            } @else if (paymentMode() === 'test') {
+            <div class="payment-note"><span aria-hidden="true">!</span>
+                <p>Mode de test uniquement : aucun paiement réel ne sera effectué ni encaissé.</p>
+            </div>
+            } @else {
+            <div class="payment-note"><span aria-hidden="true">i</span>
+                <p>Le paiement Wave n’est pas encore configuré. Aucun billet payant ne sera
+                    émis.</p>
+            </div>
+            }
+            @if (modeError()) { <p class="form-error" role="alert">{{ modeError() }}</p> }
+            }
+            <div class="gathering-place"><span class="place-icon" aria-hidden="true">⌖</span><span><small>LIEU DE
+                        RASSEMBLEMENT</small><strong>Cœur de Ville de Kaolack</strong></span></div>
+            <div class="step-indicator" aria-label="Étapes de réservation">
+                <span [class.step-active]="step() === 'details'">1</span><i></i><span
+                    [class.step-active]="step() === 'payment'">2</span>
+                <div><small>Informations</small><small>Paiement</small></div>
+            </div>
+        </section>
+
+        @if (step() === 'details') {
+        <form class="reservation-panel" #detailsForm="ngForm" (ngSubmit)="continueToPayment()">
+            <div class="panel-title"><span>VOS INFORMATIONS</span><span>01 / 02</span></div>
+            <div class="fields-grid">
+                <label>Nom<input name="nom" [(ngModel)]="form.nom" autocomplete="family-name" placeholder="Votre nom"
+                        required /></label>
+                <label>Prénom<input name="prenom" [(ngModel)]="form.prenom" autocomplete="given-name"
+                        placeholder="Votre prénom" required /></label>
+                <label class="full-field">Téléphone<input name="telephone" [(ngModel)]="form.telephone"
+                        autocomplete="tel" inputmode="tel" placeholder="Numéro joignable / WhatsApp"
+                        required /><small>Ce numéro sera utilisé uniquement pour les informations du
+                        voyage.</small></label>
+            </div>
+            <div class="fare-line"><span>Participation au trajet</span><strong>6 500 <small>F CFA</small></strong></div>
+            <button class="primary-action" type="submit">Continuer vers le paiement <span
+                    aria-hidden="true">→</span></button>
+        </form>
+        } @else {
+        <form class="reservation-panel" #paymentForm="ngForm" (ngSubmit)="submitReservation()">
+            <div class="panel-title"><span>MOYEN DE PAIEMENT</span><span>02 / 02</span></div>
+            <div class="payment-options" role="radiogroup" aria-label="Moyen de paiement">
+                @for (method of methods; track method.id) {
+                <label class="payment-option" [class.payment-option-selected]="paymentMethod() === method.id">
+                    <input type="radio" name="paymentMethod" [value]="method.id" [ngModel]="paymentMethod()"
+                        [disabled]="paymentMode() === 'unavailable' || modeLoading()"
+                        (ngModelChange)="paymentMethod.set($event)" required />
+                    <span class="payment-logo" [class.orange-logo]="method.id === 'ORANGE_MONEY'">{{ method.short
+                        }}</span>
+                    <span class="payment-copy"><strong>{{ method.name }}</strong><small>{{ paymentMode() === 'test' ? 'Mode de test' : 'Paiement sécurisé Wave' }}</small></span>
+                    <span class="radio-indicator" aria-hidden="true"></span>
+                </label>
+                }
+                <div class="payment-option payment-option-disabled" aria-disabled="true">
+                    <span class="payment-logo orange-logo">OM</span>
+                    <span class="payment-copy"><strong>Orange Money</strong><small>Bientôt disponible</small></span>
+                    <span class="payment-soon">Bientôt</span>
+                </div>
+            </div>
+            <div class="fare-line"><span>Total à payer</span><strong>6 500 F CFA</strong></div>
+            @if (error()) { <p class="form-error" role="alert">{{ error() }}</p> }
+            <button class="primary-action" type="submit"
+                [disabled]="loading() || modeLoading() || paymentMode() === 'unavailable' || paymentForm.invalid">
+                {{ loading() ? 'Préparation…' : paymentMode() === 'wave' ? 'Payer avec Wave' : paymentMode() === 'test' ? 'Simuler le paiement de test' : 'Paiement indisponible' }} <span
+                    aria-hidden="true">→</span>
+            </button>
+            <button class="secondary-action" type="button" (click)="backToDetails()" [disabled]="loading()">Modifier mes
+                informations</button>
+        </form>
+        }
+    </div>
+</main>

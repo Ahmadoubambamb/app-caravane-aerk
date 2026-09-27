@@ -1,0 +1,103 @@
+<header class="site-header">
+    <div class="header-inner">
+        <button class="brand" type="button" (click)="goHome()" aria-label="Accueil Caravane UGB">
+            <img class="brand-mark" src="logoAERK.jpeg"
+                alt="Logo de l’Amicale des étudiants ressortissants de Kaolack (AERK)" />
+            <span class="brand-copy"><strong>CARAVANE UGB</strong><small>Amicale Kaolack</small></span>
+        </button>
+        <nav class="main-nav" aria-label="Navigation principale">
+            <button type="button" class="nav-link" [class.active]="page() !== 'admin'"
+                (click)="goHome()">Accueil</button>
+        </nav>
+    </div>
+</header>
+
+@if (error()) {
+<div class="connection-error" role="alert"><span>{{ error() }}</span><button type="button" (click)="error.set('')"
+        aria-label="Fermer">×</button></div>
+}
+
+@if (page() === 'home') {
+<main class="home-screen">
+    <div class="home-inner">
+        <section class="hero-copy">
+            <div class="session-pill" [class.closed]="!session()?.active"><span class="status-dot"></span>
+                @if (session()?.active) { <span>INSCRIPTIONS OUVERTES · DÉPART {{ session()?.datesDepart }}</span> }
+                @else { <span>PROCHAINE CARAVANE À VENIR</span> }
+            </div>
+            <p class="eyebrow">Le voyage vers le campus commence ici</p>
+            <h1>Kaolack</h1>
+            <div class="route-arrow" aria-hidden="true"><i></i><svg viewBox="0 0 24 24">
+                    <path d="M4 12h15m-6-6 6 6-6 6" />
+                </svg></div>
+            <h1>Saint-Louis</h1>
+            <p class="hero-description">Retrouvons-nous sur la route de l’UGB. Réserve ta place dans la caravane de
+                l’Amicale, simplement et en quelques instants.</p>
+            <button class="reserve-button" type="button" [disabled]="!session()?.active" (click)="startReservation()">
+                {{ session()?.active ? 'Réserver ma place' : 'Réservations bientôt ouvertes' }} <span
+                    aria-hidden="true">→</span>
+            </button>
+            <p class="price-note"><span aria-hidden="true">✳</span> Une place, un trajet ensemble <b>·</b> <strong>6 500
+                    F CFA</strong></p>
+            <div class="route-summary">
+                <div class="route-summary-head"><span>LIGNE DIRECTE</span><span class="route-status"
+                        [class.inactive]="!session()?.active">{{ session()?.active ? 'Départs ouverts' : 'En
+                        préparation' }}</span></div>
+                <div class="route-stops">
+                    <div><small>DÉPART</small><strong>Cœur de Ville</strong><span>Kaolack</span></div><span
+                        class="route-stop-arrow" aria-hidden="true">→</span>
+                    <div class="destination"><small>ARRIVÉE</small><strong>UGB Saint-Louis</strong><span>Campus
+                            universitaire</span></div>
+                </div>
+            </div>
+        </section>
+        <section class="hero-art" aria-label="Voyage étudiant vers l’UGB">
+            <div class="art-ring ring-one"></div>
+            <div class="art-ring ring-two"></div>
+            <div class="travel-photo"><img
+                    src="https://images.unsplash.com/photo-1509749837427-ac94a2553d0e?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=86&w=1200"
+                    alt="Bus sur la route vers le campus" />
+                <div class="photo-shade"></div>
+                <div class="photo-topline"><span>UN VOYAGE ÉTUDIANT</span><span class="photo-badge">AERK</span></div>
+                <div class="photo-caption"><span>PLUS QU’UN TRAJET</span>
+                    <h2>La route de l’UGB,<br />on la fait ensemble.</h2>
+                    <p><span class="mini-bus" aria-hidden="true">▰</span> Un voyage organisé par l’Amicale</p>
+                </div>
+            </div>
+            <div class="art-stamp"><span>DE KAOLACK</span><b aria-hidden="true">✳</b><span>VERS L’UGB</span></div>
+        </section>
+    </div>
+    <footer class="home-footer"><span>AMICALE DES ÉTUDIANTS RESSORTISSANTS DE KAOLACK</span><span>ENSEMBLE, SUR LA
+            ROUTE.</span></footer>
+</main>
+}
+@if (page() === 'reservation') {
+<app-reservation-form (completed)="showTicket($event)" (cancel)="goHome()" />
+}
+@if (page() === 'ticket' && receipt(); as currentReceipt) {
+<app-ticket-confirmation [receipt]="currentReceipt" (done)="goHome()" />
+}
+@if (page() === 'payment-return') {
+<main class="payment-return">
+    <div class="payment-return-card">
+        @if (paymentChecking()) {
+        <span class="payment-spinner" aria-hidden="true"></span>
+        }
+        <p class="eyebrow">PAIEMENT WAVE</p>
+        <h1>{{ paymentChecking() ? 'Confirmation en cours' : 'État du paiement' }}</h1>
+        <p role="status">{{ paymentMessage() }}</p>
+        @if (!paymentChecking()) {
+        @if (paymentToken) {
+        <button class="reserve-button" type="button" (click)="retryWaveVerification()">Vérifier à nouveau</button>
+        }
+        <button class="payment-home-button" type="button" (click)="goHome()">Retour à l’accueil</button>
+        }
+    </div>
+</main>
+}
+@if (page() === 'admin-login') {
+<app-admin-login (authenticated)="onAdminAuthenticated()" (cancel)="goHome()" />
+}
+@if (page() === 'admin') {
+<app-admin-dashboard (sessionChange)="updateSession($event)" (logout)="logoutAdmin()" />
+}
