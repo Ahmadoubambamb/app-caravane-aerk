@@ -4,14 +4,15 @@ import { Observable } from 'rxjs';
 import { Bus } from '../models/bus';
 import { CaravaneSession } from '../models/caravane-session';
 import { Reservation } from '../models/reservation';
+import { API_BASE_URL } from '../core/api-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Caravane {
   private readonly http = inject(HttpClient);
-  private readonly publicEndpoint = 'http://localhost:8080/api/public';
-  private readonly adminEndpoint = 'http://localhost:8080/api/admin';
+  private readonly publicEndpoint = `${API_BASE_URL}/api/public`;
+  private readonly adminEndpoint = `${API_BASE_URL}/api/admin`;
 
   getActiveSession(): Observable<CaravaneSession | null> {
     return this.http.get<CaravaneSession | null>(`${this.publicEndpoint}/caravane-statut`);

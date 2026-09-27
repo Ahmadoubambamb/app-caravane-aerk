@@ -9,6 +9,7 @@ import {
   WaveCheckoutResponse,
   WavePaymentStatus,
 } from '../models/reservation';
+import { API_BASE_URL } from '../core/api-url';
 
 interface PaymentModeResponse {
   mode: PaymentMode;
@@ -17,7 +18,7 @@ interface PaymentModeResponse {
 @Injectable({ providedIn: 'root' })
 export class Reservation {
   private readonly http = inject(HttpClient);
-  private readonly endpoint = 'http://localhost:8080/api/public';
+  private readonly endpoint = `${API_BASE_URL}/api/public`;
 
   getPaymentMode(): Observable<PaymentModeResponse> {
     return this.http.get<PaymentModeResponse>(`${this.endpoint}/paiements/mode`);
